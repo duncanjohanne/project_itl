@@ -4,12 +4,12 @@ def display_data(delayAB, delayC, countAB, countC, times):
     if times == 1:
         print("Stats Collected : ")
         print(59*"-")
-        print("| AB Delay | C Delay | AB Vehicle Count | C Vehicle Count |")
+        print("| AB Delay   | C Delay | AB Vehicle Count | C Vehicle Count |")
         print(59*"-")
-        print("|    "+str(delayAB)+"     |    "+str(delayC)+"    |        "+str(countAB)+"         |       "+str(countC)+"         |")
+        print("|    "+str(delayAB)+"         "+str(delayC)+"            "+str(countAB)+"                "+str(countC)+"         |")
         print(59*"-")
     else:
-        print("|    "+str(delayAB)+"     |    "+str(delayC)+"    |        "+str(countAB)+"         |       "+str(countC)+"         |")
+        print("|    "+str(delayAB)+"         "+str(delayC)+"            "+str(countAB)+"                "+str(countC)+"         |")
         print(59*"-")
 
     times += 1

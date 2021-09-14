@@ -1,8 +1,11 @@
 import cv2
 import time
+from csv import writer
+import pandas as pd
 
 # timing based on vehicle volumes
 def calculate_delays(countAB, countC, objectPerSecond):
+    boon = ''
     delayAB = countAB * objectPerSecond
     delayC = countC * objectPerSecond
 
@@ -14,8 +17,14 @@ def calculate_delays(countAB, countC, objectPerSecond):
         delayC = 5
     if delayAB == 0:
         delayAB = 5
+    if delayAB > delayC:
+        boon = 'endAB'
+    if delayC > delayAB:
+        boon = 'endC'
+    if delayAB == delayC:
+        boon = 'neutral'
 
-    return delayAB, delayC
+    return delayAB, delayC, boon
 
 
 def count_vehicles(terminate, cam):
@@ -69,7 +78,7 @@ def count_vehicles(terminate, cam):
         #showing vehicle counting 
         cv2.putText(frame, 'Total Vehicles : {}'.format(vehicle_counter), (250, 50), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
         #showing frame
-        cv2.imshow('Frame', frame)
+        # cv2.imshow('Frame', frame)
         
         
         # cv2.imshow('Mask', mask)
@@ -88,6 +97,52 @@ def count_vehicles(terminate, cam):
     cv2.destroyAllWindows()
 
     return vehicle_counter
+
+
+def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
+    #high to green
+##    board.digital[led_green].write(1)
+    terminate = time.localtime().tm_sec + delay_endsAB[index]
+    endsCcount = count_vehicles(terminate, endCcam)
+    # return endsCcount
+    #low to green
+##    board.digital[led_green].write(0)
+##    #high to amber
+##    board.digital[led_amber].write(1)
+##    time.sleep(2)
+##    #low to amber
+##    board.digital[led_amber].write(0)
+##    #high to red
+##    board.digital[led_red].write(1)
+    #low to red_
+#     board.digital[led_red_].write(0)
+#     #high to green_
+#     board.digital[led_green_].write(1)
+    terminate = time.localtime().tm_sec + delay_endC[index]
+   #counting vehicles
+    endsABcount = count_vehicles(terminate, endABcam)
+#     #low to green_
+#     board.digital[led_green_].write(0)
+#     #high to amber_
+#     board.digital[led_amber_].write(1)
+#     time.sleep(5)
+#     #low to amber_
+#     board.digital[led_amber_].write(0)
+#     #high to red_
+#     board.digital[led_red_].write(1)
+    #low to red
+##    board.digital[led_red].write(0)
+    
+    return endsABcount, endsCcount
+
+def logTrafficStats(file, endC, endAB, endCdelay, endABdelay, boon):
+    hour = time.localtime().tm_hour
+    data = pd.DataFrame([[hour, endC, endAB, endCdelay, endABdelay, boon]], columns = ['hour', 'endC', 'endAB', 'endCdelay', 'endABdelay', 'boon'])
+
+    # with pd.ExcelWriter('data.xlsx', mode='a', if_sheet_exists='replace') as writer:
+    #     data.to_excel(writer, sheet_name='Sheet1')
+    data.to_csv('data.csv', mode='a', index=False, header=None)
+    
 
 ## term = time.localtime().tm_sec + 30
 ## val = count_vehicles(term, 'A.mp4')
