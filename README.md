@@ -1,2 +1,2 @@
 # project_itl
-A system traffic system that incorporates intelligence in its decision making process.
+A traffic system that incorporates intelligence in its decision making process.
