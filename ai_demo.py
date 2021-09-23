@@ -7,7 +7,7 @@ data = pd.read_csv("data.csv")
 df = pd.DataFrame(data)
 model = pickle.load(open('model.pkl', 'rb'))
 
-st.title('Prediction of which end of a T-junction is booned based on traffic data collected')
+st.title('Prediction of which end of a T-junction is preffered based on traffic data collected')
 hour_predict = st.text_input("Hour of Day 24hr(0-23)")
 st.button('Predict')
 
