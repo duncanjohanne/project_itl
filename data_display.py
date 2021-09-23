@@ -3,14 +3,14 @@ times = 1
 def display_data(delayAB, delayC, countAB, countC, times):
     if times == 1:
         print("Stats Collected : ")
-        print(59*"-")
-        print("| AB Delay   | C Delay | AB Vehicle Count | C Vehicle Count |")
-        print(59*"-")
-        print("|    "+str(delayAB)+"         "+str(delayC)+"            "+str(countAB)+"                "+str(countC)+"         |")
-        print(59*"-")
+        print(96*"-")
+        print("| AB Delay   | C Delay | AB Vehicle Count | C Vehicle Count | Scaled AB Delay | Scaled C Delay |")
+        print(96*"-")
+        print("    "+str(round(delayAB, 1))+"         "+str(round(delayC))+"            "+str(countAB)+"                "+str(countC)+"                   "+str(round(delayAB/10, 1))+"                "+str(round(delayC/10, 1))+"  ")
+        print(96*"-")
     else:
-        print("|    "+str(delayAB)+"         "+str(delayC)+"            "+str(countAB)+"                "+str(countC)+"         |")
-        print(59*"-")
+        print("    "+str(round(delayAB, 1))+"         "+str(round(delayC))+"            "+str(countAB)+"                "+str(countC)+"                   "+str(round(delayAB/10, 1))+"                "+str(round(delayC/10, 1))+"  ")
+        print(96*"-")
 
     times += 1
     return times

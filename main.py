@@ -18,11 +18,11 @@ def calculate_delays(countAB, countC, objectPerSecond):
     if delayAB == 0:
         delayAB = 5
     if delayAB > delayC:
-        boon = 'endAB'
+        boon = 0
     if delayC > delayAB:
-        boon = 'endC'
+        boon = 2
     if delayAB == delayC:
-        boon = 'neutral'
+        boon = 1
 
     return delayAB, delayC, boon
 
@@ -49,7 +49,7 @@ def count_vehicles(terminate, cam):
         mask = object_detector.apply(frame)
 
         #cleaning mask, removing shadows
-    # _, mask = cv2.threshold(mask, 254, 255, cv2.THRESH_BINARY)
+        _, mask = cv2.threshold(mask, 254, 255, cv2.THRESH_BINARY)
         
         #extracting boundaries of the moving objects from mask
         contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -74,11 +74,11 @@ def count_vehicles(terminate, cam):
                     vehicle_counter += 1
 
         #showing threshold line
-        cv2.line(frame, (70,400), (350, 400), (0,0,255), 2)#red line
+        # cv2.line(frame, (70,400), (350, 400), (0,0,255), 2)#red line
         #showing vehicle counting 
-        cv2.putText(frame, 'Total Vehicles : {}'.format(vehicle_counter), (250, 50), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+        # cv2.putText(frame, 'Total Vehicles : {}'.format(vehicle_counter), (250, 50), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
         #showing frame
-        # cv2.imshow('Frame', frame)
+        cv2.imshow('Frame', frame)
         
         
         # cv2.imshow('Mask', mask)
@@ -103,6 +103,8 @@ def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
     #high to green
 ##    board.digital[led_green].write(1)
     terminate = time.localtime().tm_sec + delay_endsAB[index]
+    if terminate > 59:
+        terminate = 60 - terminate
     endsCcount = count_vehicles(terminate, endCcam)
     # return endsCcount
     #low to green
@@ -119,6 +121,8 @@ def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
 #     #high to green_
 #     board.digital[led_green_].write(1)
     terminate = time.localtime().tm_sec + delay_endC[index]
+    if terminate > 59:
+        terminate = 60 - terminate
    #counting vehicles
     endsABcount = count_vehicles(terminate, endABcam)
 #     #low to green_
@@ -137,7 +141,7 @@ def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
 
 def logTrafficStats(file, endC, endAB, endCdelay, endABdelay, boon):
     hour = time.localtime().tm_hour
-    data = pd.DataFrame([[hour, endC, endAB, endCdelay, endABdelay, boon]], columns = ['hour', 'endC', 'endAB', 'endCdelay', 'endABdelay', 'boon'])
+    data = pd.DataFrame([[hour, endC, endAB, endCdelay, endABdelay, boon]], columns = ['hour', 'endC', 'endAB', 'endCdelay', 'endABdelay', 'preffered'])
 
     # with pd.ExcelWriter('data.xlsx', mode='a', if_sheet_exists='replace') as writer:
     #     data.to_excel(writer, sheet_name='Sheet1')

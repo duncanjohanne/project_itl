@@ -1,9 +1,10 @@
 import pyfirmata
 import time
+import numpy as np
 from main import count_vehicles, calculate_delays, controller, logTrafficStats
 from data_display import display_data
 
-file = 'data.xlsx'
+file = 'data.csv'
 
 displaycount = 1
 led_red = 13
@@ -18,11 +19,11 @@ board = 0 ##pyfirmata.Arduino(port)
 
 index = 0
 
-delay_endsAB = [1, 2, 3]
-delay_endC = [2, 3, 4]
+delay_endsAB = np.array([3, 4, 5, 5, 6, 7, 3, 4, 5, 5, 6, 7])
+delay_endC = np.array([5, 6, 7, 3, 4, 5, 5, 6, 7, 3, 4, 5])
 
 test_camAB = []
-endABcam = 'AB.mp4'
+endABcam = 'AB2.mp4'
 endCcam = 'C.mp4'
 
 endsABcount = 0
@@ -53,6 +54,6 @@ while True:
 ##    time.sleep(2)
 ##    board.digital[led_red].write(0)
     index = index + 1
-    if index == 3:
+    if index == 12:
         index = 0
     
