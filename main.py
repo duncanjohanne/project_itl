@@ -3,6 +3,15 @@ import time
 from csv import writer
 import pandas as pd
 
+led_red = 13
+led_amber = 12
+led_green = 11
+
+led_red_ = 10
+led_amber_ = 9
+led_green_ = 8
+port = 'COM12'
+
 # timing based on vehicle volumes
 def calculate_delays(countAB, countC, objectPerSecond):
     boon = ''
@@ -11,8 +20,12 @@ def calculate_delays(countAB, countC, objectPerSecond):
 
     if delayAB < 10:
         delayAB = 10
+    if delayAB > 30:
+        delayAB = 30
     if delayC < 10:
         delayC = 10
+    if delayC > 30:
+        delayC = 30
     if delayC == 0:
         delayC = 5
     if delayAB == 0:
@@ -101,42 +114,42 @@ def count_vehicles(terminate, cam):
 
 def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
     #high to green
-##    board.digital[led_green].write(1)
+    # board.digital[led_green].write(1)
     terminate = time.localtime().tm_sec + delay_endsAB[index]
     if terminate > 59:
         terminate = 60 - terminate
     endsCcount = count_vehicles(terminate, endCcam)
     # return endsCcount
     #low to green
-##    board.digital[led_green].write(0)
-##    #high to amber
-##    board.digital[led_amber].write(1)
-##    time.sleep(2)
-##    #low to amber
-##    board.digital[led_amber].write(0)
-##    #high to red
-##    board.digital[led_red].write(1)
-    #low to red_
-#     board.digital[led_red_].write(0)
-#     #high to green_
-#     board.digital[led_green_].write(1)
+    # board.digital[led_green].write(0)
+    #high to amber
+    # board.digital[led_amber].write(1)
+    # time.sleep(2)
+    # #    #low to amber
+    # board.digital[led_amber].write(0)
+    # #    #high to red
+    # board.digital[led_red].write(1)
+    #     low to red_
+    # board.digital[led_red_].write(0)
+    #     #high to green_
+    # board.digital[led_green_].write(1)
     terminate = time.localtime().tm_sec + delay_endC[index]
     if terminate > 59:
         terminate = 60 - terminate
-   #counting vehicles
+    #counting vehicles
     endsABcount = count_vehicles(terminate, endABcam)
-#     #low to green_
-#     board.digital[led_green_].write(0)
-#     #high to amber_
-#     board.digital[led_amber_].write(1)
-#     time.sleep(5)
-#     #low to amber_
-#     board.digital[led_amber_].write(0)
-#     #high to red_
-#     board.digital[led_red_].write(1)
+    #     #low to green_
+    # board.digital[led_green_].write(0)
+    #     #high to amber_
+    # board.digital[led_amber_].write(1)
+    # time.sleep(5)
+    #     #low to amber_
+    # board.digital[led_amber_].write(0)
+    #     #high to red_
+    # board.digital[led_red_].write(1)
     #low to red
-##    board.digital[led_red].write(0)
-    
+    # board.digital[led_red].write(0)
+
     return endsABcount, endsCcount
 
 def logTrafficStats(file, endC, endAB, endCdelay, endABdelay, boon):
