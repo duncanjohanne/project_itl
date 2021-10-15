@@ -3,6 +3,7 @@ import time
 from csv import writer
 import pandas as pd
 
+
 led_red = 13
 led_amber = 12
 led_green = 11
@@ -47,7 +48,7 @@ def count_vehicles(terminate, cam):
     #object detector used to extract moving objects
     #history attribute increases precision of object detection
     #varthreshold reduces false positives
-    object_detector = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=50)
+    object_detector = cv2.createBackgroundSubtractorMOG2(history=300, varThreshold=100)
 
     vehicle_counter = 0
     #looping 
@@ -68,15 +69,19 @@ def count_vehicles(terminate, cam):
         contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         #iterating through the contours
+        detections = []
         for cnt in contours:
             #calculating area and eliminating small elements
             area = cv2.contourArea(cnt)
             #drawing contours on objects
-            if area > 650:
+            
+            if area > 750:
                 #cv2.drawContours(frame, [cnt], -1, (0, 255, 0), 2)
                 #extracting values for drawing rectangle on object
                 x, y, w, h = cv2.boundingRect(cnt)
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 1)
+
+                detections.append([x,y,w,h])
 
                 #middle points
                 xMid = int((x + (x+w))/2)
@@ -85,6 +90,12 @@ def count_vehicles(terminate, cam):
 
                 if yMid > 400 and yMid < 420:
                     vehicle_counter += 1
+        
+        # box_ids = tracker.update(detections)
+        # for box_id in box_ids:
+        #     x, y, w, h, id = box_id
+        #     vehicle_counter = vehicle_counter + 1
+
 
         #showing threshold line
         # cv2.line(frame, (70,400), (350, 400), (0,0,255), 2)#red line
@@ -108,6 +119,8 @@ def count_vehicles(terminate, cam):
 
     cap.release()
     cv2.destroyAllWindows()
+
+    vehicle_counter = int((vehicle_counter/3.3)*2)
 
     return vehicle_counter
 
