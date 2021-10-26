@@ -132,6 +132,7 @@ def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
     if terminate > 59:
         terminate = 60 - terminate
     endsCcount = count_vehicles(terminate, endCcam)
+    endsCcount = int((endsCcount/3.3)*2.7)
     # return endsCcount
     #low to green
     # board.digital[led_green].write(0)
@@ -151,6 +152,7 @@ def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
         terminate = 60 - terminate
     #counting vehicles
     endsABcount = count_vehicles(terminate, endABcam)
+    endsABcount = int((endsABcount/3.3)*2.7)
     #     #low to green_
     # board.digital[led_green_].write(0)
     #     #high to amber_
