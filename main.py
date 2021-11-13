@@ -88,7 +88,7 @@ def count_vehicles(terminate, cam):
                 yMid = int((y + (y+h))/2)
                 cv2.circle(frame, (xMid, yMid), 5, (0, 255, 0), 5 )
 
-                if yMid > 400 and yMid < 420:
+                if yMid > 600 and yMid < 620:
                     vehicle_counter += 1
         
         # box_ids = tracker.update(detections)
@@ -98,8 +98,8 @@ def count_vehicles(terminate, cam):
 
 
         #showing threshold line
-        # cv2.line(frame, (70,400), (350, 400), (0,0,255), 2)#red line
-        #showing vehicle counting 
+        cv2.line(frame, (70,600), (600, 600), (0,0,255), 2)#red line
+        # showing vehicle counting 
         # cv2.putText(frame, 'Total Vehicles : {}'.format(vehicle_counter), (250, 50), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
         #showing frame
         cv2.imshow('Frame', frame)
@@ -132,7 +132,7 @@ def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
     if terminate > 59:
         terminate = 60 - terminate
     endsCcount = count_vehicles(terminate, endCcam)
-    endsCcount = int((endsCcount/3.3)*2.7)
+    # endsCcount = int((endsCcount/3.3)*2.7)
     # return endsCcount
     #low to green
     # board.digital[led_green].write(0)
@@ -152,7 +152,7 @@ def controller(board, index, delay_endsAB, delay_endC, endCcam, endABcam):
         terminate = 60 - terminate
     #counting vehicles
     endsABcount = count_vehicles(terminate, endABcam)
-    endsABcount = int((endsABcount/3.3)*2.7)
+    # endsABcount = int((endsABcount/3.3)*2.7)
     #     #low to green_
     # board.digital[led_green_].write(0)
     #     #high to amber_
